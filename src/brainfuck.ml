@@ -13,8 +13,14 @@ let handle_exc e =
 let () =
   Err.setup_printer;
   try
-    get_file_name
+    let tokens = get_file_name
     |> File.read
-    |> print_endline
+    |> Lexer.tokenize in
+
+    let debug_list = tokens
+    |> List.map Lexer.string_of_token in
+
+    let debug_output = String.concat ", " debug_list in
+    print_endline @@ "[" ^ debug_output ^ "]"
   with e ->
     handle_exc e
