@@ -1,0 +1,3 @@
+(executable
+  (name brainfuck)
+    (public_name brainfuck.exe))
