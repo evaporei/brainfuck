@@ -42,6 +42,12 @@ let output st =
   print_char @@ Char.chr character;
   st
 
+let input st =
+  let user_input = Scanf.scanf "%c" Fun.id in
+  let char_code = Char.code user_input in
+  Array.set st.tape st.index char_code;
+  st
+
 let interpret acc_state character =
   match character with
   | '>' -> increment_pointer acc_state
@@ -49,6 +55,7 @@ let interpret acc_state character =
   | '+' -> increment_cell acc_state
   | '-' -> decrement_cell acc_state
   | '.' -> output acc_state
+  | ',' -> input acc_state
   | _ -> acc_state
 
 let list_of_chars s =
