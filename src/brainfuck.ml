@@ -37,12 +37,18 @@ let decrement_cell st =
   Array.set st.tape st.index new_val;
   st
 
+let output st =
+  let character = st.tape.(st.index) in
+  print_char @@ Char.chr character;
+  st
+
 let interpret acc_state character =
   match character with
   | '>' -> increment_pointer acc_state
   | '<' -> decrement_pointer acc_state
   | '+' -> increment_cell acc_state
   | '-' -> decrement_cell acc_state
+  | '.' -> output acc_state
   | _ -> acc_state
 
 let list_of_chars s =
