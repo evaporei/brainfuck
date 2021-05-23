@@ -24,9 +24,13 @@ let string_of_state s =
 let increment_pointer st =
   { tape = st.tape; index = st.index + 1 }
 
+let decrement_pointer st =
+  { tape = st.tape; index = st.index - 1 }
+
 let interpret acc_state character =
   match character with
   | '>' -> increment_pointer acc_state
+  | '<' -> decrement_pointer acc_state
   | _ -> acc_state
 
 let list_of_chars s =
