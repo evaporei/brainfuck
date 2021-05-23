@@ -32,11 +32,17 @@ let increment_cell st =
   Array.set st.tape st.index new_val;
   { tape = st.tape; index = st.index }
 
+let decrement_cell st =
+  let new_val = st.tape.(st.index) - 1 in
+  Array.set st.tape st.index new_val;
+  { tape = st.tape; index = st.index }
+
 let interpret acc_state character =
   match character with
   | '>' -> increment_pointer acc_state
   | '<' -> decrement_pointer acc_state
   | '+' -> increment_cell acc_state
+  | '-' -> decrement_cell acc_state
   | _ -> acc_state
 
 let list_of_chars s =
