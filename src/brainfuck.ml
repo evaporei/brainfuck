@@ -13,6 +13,7 @@ let handle_exc e =
 type state = {
   tape : int array;
   index : int;
+  in_loop : bool;
 }
 
 let string_of_state s =
@@ -22,10 +23,10 @@ let string_of_state s =
   "}"
 
 let increment_pointer st =
-  { tape = st.tape; index = st.index + 1 }
+  { tape = st.tape; index = st.index + 1; in_loop = st.in_loop }
 
 let decrement_pointer st =
-  { tape = st.tape; index = st.index - 1 }
+  { tape = st.tape; index = st.index - 1; in_loop = st.in_loop }
 
 let increment_cell st =
   let new_val = st.tape.(st.index) + 1 in
@@ -49,21 +50,21 @@ let input st =
   st
 
 let interpret acc_state character =
-  match character with
-  | '>' -> increment_pointer acc_state
-  | '<' -> decrement_pointer acc_state
-  | '+' -> increment_cell acc_state
-  | '-' -> decrement_cell acc_state
-  | '.' -> output acc_state
-  | ',' -> input acc_state
+  match (character, acc_state.in_loop) with
+  | ('>', _) -> increment_pointer acc_state
+  | ('<', _) -> decrement_pointer acc_state
+  | ('+', _) -> increment_cell acc_state
+  | ('-', _) -> decrement_cell acc_state
+  | ('.', _) -> output acc_state
+  | (',', _) -> input acc_state
   | _ -> acc_state
 
 let list_of_chars s =
   List.init (String.length s) (String.get s)
 
 let interpreter chars =
-  List.fold_left interpret { tape = Array.make 200 0; index = 0 } chars
-  (* List.fold_left interpret { tape = Array.make 30000 0; index = 0 } chars *)
+  List.fold_left interpret { tape = Array.make 200 0; index = 0; in_loop = false } chars
+  (* List.fold_left interpret { tape = Array.make 30000 0; index = 0; in_loop = false } chars *)
 
 let () =
   Err.setup_printer;
