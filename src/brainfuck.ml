@@ -21,8 +21,13 @@ let string_of_state s =
   "\tindex: " ^ string_of_int s.index ^ "\n, " ^
   "}"
 
+let increment_pointer st =
+  { tape = st.tape; index = st.index + 1 }
+
 let interpret acc_state character =
-  acc_state
+  match character with
+  | '>' -> increment_pointer acc_state
+  | _ -> acc_state
 
 let list_of_chars s =
   List.init (String.length s) (String.get s)
