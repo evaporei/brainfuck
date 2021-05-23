@@ -10,17 +10,37 @@ let handle_exc e =
   print_endline @@ "Fatal error: " ^ err_msg;
   exit 1
 
+type state = {
+  tape : int array;
+  index : int;
+}
+
+let string_of_state s =
+  "{\n" ^
+  "\ttape: " ^ Array.fold_left (fun acc curr -> acc ^ string_of_int curr ^ ", ") "" s.tape ^ "\n, " ^
+  "\tindex: " ^ string_of_int s.index ^ "\n, " ^
+  "}"
+
+let interpret acc_state character =
+  acc_state
+
+let list_of_chars s =
+  List.init (String.length s) (String.get s)
+
+let interpreter chars =
+  List.fold_left interpret { tape = Array.make 200 0; index = 0 } chars
+  (* List.fold_left interpret { tape = Array.make 30000 0; index = 0 } chars *)
+
 let () =
   Err.setup_printer;
   try
-    let tokens = get_file_name
+    let final_state = get_file_name
     |> File.read
-    |> Lexer.tokenize in
+    |> list_of_chars
+    |> interpreter
+    |> string_of_state
+    in
 
-    let debug_list = tokens
-    |> List.map Lexer.string_of_token in
-
-    let debug_output = String.concat ", " debug_list in
-    print_endline @@ "[" ^ debug_output ^ "]"
+    print_endline final_state
   with e ->
     handle_exc e
