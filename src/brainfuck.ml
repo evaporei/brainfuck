@@ -30,12 +30,12 @@ let decrement_pointer st =
 let increment_cell st =
   let new_val = st.tape.(st.index) + 1 in
   Array.set st.tape st.index new_val;
-  { tape = st.tape; index = st.index }
+  st
 
 let decrement_cell st =
   let new_val = st.tape.(st.index) - 1 in
   Array.set st.tape st.index new_val;
-  { tape = st.tape; index = st.index }
+  st
 
 let interpret acc_state character =
   match character with
