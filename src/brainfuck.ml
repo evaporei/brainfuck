@@ -17,10 +17,21 @@ let () =
     |> File.read
     |> Lexer.tokenize in
 
-    let debug_list = tokens
+    let debug_tokens = tokens
     |> List.map Lexer.string_of_token in
 
-    let debug_output = String.concat ", " debug_list in
-    print_endline @@ "[" ^ debug_output ^ "]"
+    let debug_tokens_output = String.concat ", " debug_tokens in
+    print_endline @@ "[" ^ debug_tokens_output ^ "]";
+
+    let commands = match Parser.parse tokens [] false with
+    | Ok cmds -> cmds
+    | Error e -> raise (Err e)
+    in
+
+    let debug_commands = commands
+    |> List.map Parser.string_of_command in
+
+    let debug_commands_output = String.concat ", " debug_commands in
+    print_endline @@ "[" ^ debug_commands_output ^ "]"
   with e ->
     handle_exc e
